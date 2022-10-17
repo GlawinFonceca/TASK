@@ -48,12 +48,17 @@ router.post('/userSignup', (req, res) => {
     try {
         const uname = validate.isAlpha(req.body.name);
         const uemail = validate.isEmail(req.body.email);
-        const upassword = validate.isAlphanumeric(req.body.password);
-        const passwordlength = validate.isLength(req.body.password, 6, undefined)
-        const uphone = validate.isMobilePhone(req.body.phone);
+        const upassword = validate.isStrongPassword(req.body.password,{
+            minLength:6, minUppercase: 1, minSymbols: 1, returnScore: false, minNumbers :1});
+        const uphone = validate.isLength(req.body.phone,{
+            min:10 ,max:10
+
+        });
+        console.log(uphone);
+        console.log(req.body.phone.length);
 
 
-        if (uname === true && uemail === true && upassword === true && passwordlength === true && uphone === true) {
+        if (uname === true && uemail === true && upassword === true && uphone === true) {
             const dataBuffer = fs.readFileSync('user.json');
             const dataJson = dataBuffer.toString();
             const Users = JSON.parse(dataJson);
@@ -77,11 +82,7 @@ router.post('/userSignup', (req, res) => {
             })
         } else if (upassword !== true) {
             res.render('signup', {
-                message: 'please enter alphanumeric password'
-            })
-        } else if (passwordlength !== true) {
-            res.render('signup', {
-                message: 'password must contain min 6 characters'
+                message: 'Password should contain one symbol,one uppercase letter, one number and minium 6 characters'
             })
         } else if (uphone !== true) {
             res.render('signup', {

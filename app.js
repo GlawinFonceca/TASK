@@ -1,11 +1,8 @@
 const express = require('express')
-const fs = require('fs');
 const path = require('path');
 const hbs = require('hbs')
-const validate = require('validator')
 const port = 2000;
 const bodyParser = require('body-parser');
-const { validateHeaderValue } = require('http');
 const app = express()
 const router=require('./routes/user')
 
